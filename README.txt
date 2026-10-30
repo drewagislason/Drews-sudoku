@@ -10,6 +10,8 @@ How to play
 - The blank "erase" tile clears a square.
 - Shaded runes are given at the start and can't be changed.
 - Conflicting runes are outlined in red. A full, correct grid wins automatically.
+- Hint points you to a row, column, or box to check (it never reveals the rune).
+  If a placed rune is wrong, it names the row with the mistake.
 - Easy / Medium / Hard start a new puzzle (about 40-45 / 32-36 / 26-30 given runes).
   New Game starts a fresh puzzle at the current level. Every puzzle has one unique solution.
 

@@ -58,11 +58,42 @@
     for (var i = 0; i < 81; i++) if (!(g[i] >= 1 && g[i] <= 9)) return false;
     return Object.keys(conflicts(g)).length === 0;
   }
-  var API = { RUNES: RUNES, LEVELS: LEVELS, generate: generate, isSolved: isSolved, conflicts: conflicts, count: count };
+  function cands(g, i) { var c = []; for (var v = 1; v <= 9; v++) if (ok(g, i, v)) c.push(v); return c; }
+  function units() {
+    var u = [], k, j;
+    for (k = 0; k < 9; k++) {
+      var r = [], c = [], b = [];
+      for (j = 0; j < 9; j++) { r.push(k * 9 + j); c.push(j * 9 + k); b.push((Math.floor(k / 3) * 3 + Math.floor(j / 3)) * 9 + (k % 3) * 3 + j % 3); }
+      u.push({ name: 'row ' + (k + 1), cells: r }, { name: 'column ' + (k + 1), cells: c }, { name: 'box ' + (k + 1), cells: b });
+    }
+    return u;
+  }
+  // Vague hint: returns e.g. 'Check row 3'. Never reveals a rune.
+  function hint(g, solution) {
+    var i, list = [];
+    for (i = 0; i < 81; i++) if (g[i] && solution && g[i] !== solution[i]) return { text: 'Something is wrong in row ' + (Math.floor(i / 9) + 1) + '.', kind: 'error', cell: i };
+    if (g.indexOf(0) < 0) return { text: 'The grid is full.', kind: 'full' };
+    var U = units(), work = g.slice();
+    for (i = 0; i < 81; i++) if (!g[i] && cands(work, i).length === 1) {
+      var r = Math.floor(i / 9), c = i % 9;
+      list.push({ text: 'Check ' + ['row ' + (r + 1), 'column ' + (c + 1), 'box ' + (Math.floor(r / 3) * 3 + Math.floor(c / 3) + 1)][Math.floor(Math.random() * 3)] + '.', kind: 'naked', cell: i });
+    }
+    U.forEach(function (u) {
+      for (var v = 1; v <= 9; v++) {
+        var spots = u.cells.filter(function (x) { return !g[x] && ok(work, x, v); });
+        if (spots.length === 1 && u.cells.every(function (x) { return g[x] !== v; })) list.push({ text: 'Check ' + u.name + '.', kind: 'hidden', cell: spots[0] });
+      }
+    });
+    if (list.length) return list[Math.floor(Math.random() * list.length)];
+    var best = -1, bn = 10;
+    for (i = 0; i < 81; i++) if (!g[i]) { var n = cands(work, i).length; if (n < bn) { bn = n; best = i; } }
+    return { text: 'Check row ' + (Math.floor(best / 9) + 1) + '.', kind: 'fewest', cell: best };
+  }
+  var API = { RUNES: RUNES, LEVELS: LEVELS, generate: generate, isSolved: isSolved, conflicts: conflicts, count: count, hint: hint, cands: cands };
   if (typeof module !== 'undefined' && module.exports) { module.exports = API; return; }
 
   var gridEl = document.getElementById('grid'), barEl = document.getElementById('bar'), statusEl = document.getElementById('status');
-  var state = { level: 'easy', grid: [], given: [], sel: 1, won: false }, cells = [], tiles = [];
+  var state = { level: 'easy', grid: [], given: [], sel: 1, won: false, solution: [], msg: '' }, cells = [], tiles = [];
   for (var i = 0; i < 81; i++) {
     var d = document.createElement('div'); d.className = 'cell' + ((i % 9 === 2 || i % 9 === 5) ? ' c3' : '') + ((Math.floor(i / 9) === 2 || Math.floor(i / 9) === 5) ? ' r3' : '');
     d.dataset.i = i; d.addEventListener('click', onCell); gridEl.appendChild(d); cells.push(d);
@@ -71,15 +102,15 @@
     var t = document.createElement('button'); var val = v === 10 ? 0 : v;
     t.className = 'tile' + (val ? '' : ' blank'); t.textContent = val ? RUNES[val - 1] : 'erase';
     t.title = val ? 'Rune ' + val : 'Blank (erase)'; t.dataset.v = val;
-    t.addEventListener('click', function () { state.sel = +this.dataset.v; render(); }); barEl.appendChild(t); tiles.push(t);
+    t.addEventListener('click', function () { state.sel = +this.dataset.v; state.msg = ''; render(); }); barEl.appendChild(t); tiles.push(t);
   }
   function onCell() {
     var i = +this.dataset.i; if (state.won || state.given[i]) return;
-    state.grid[i] = state.sel; render();
+    state.grid[i] = state.sel; state.msg = ''; render();
     if (isSolved(state.grid)) { state.won = true; render(); }
   }
   function newGame() {
-    var p = generate(state.level); state.grid = p.puzzle.slice(); state.given = p.puzzle.map(Boolean); state.won = false; render();
+    var p = generate(state.level); state.grid = p.puzzle.slice(); state.solution = p.solution; state.msg = ''; state.given = p.puzzle.map(Boolean); state.won = false; render();
   }
   function render() {
     var bad = conflicts(state.grid), counts = [0,0,0,0,0,0,0,0,0,0];
@@ -96,8 +127,11 @@
     var filled = counts.slice(1).reduce(function (a, b) { return a + b; }, 0);
     statusEl.textContent = state.won ? 'ᛋᚴᚨᛚ! Victory — the grid is complete. Well fought, Viking!'
       : (state.level[0].toUpperCase() + state.level.slice(1)) + ' · ' + state.given.filter(Boolean).length + ' given runes · ' + (81 - filled) + ' empty';
+    if (state.msg && !state.won) statusEl.textContent = 'Hint: ' + state.msg;
   }
   document.querySelectorAll('.level').forEach(function (b) { b.addEventListener('click', function () { state.level = b.dataset.level; newGame(); }); });
   document.getElementById('newgame').addEventListener('click', newGame);
+  document.getElementById('hint').addEventListener('click', function () { if (state.won) return; var h = hint(state.grid, state.solution); state.msg = h ? h.text : ''; render(); });
   newGame();
+  if (/[?#&]showhint/.test(location.href)) document.getElementById('hint').click();
 })();

@@ -9,7 +9,7 @@
 <body>
 <div id="app">
   <div class="frame">
-    <div class="title"><span class="runes">ᛋᚢᛞᛟᚲᚢ</span><span class="sub">Viking Sudoku</span></div>
+    <div class="title"><span class="runes">ᛋᚢᛞᛟᚲᚢ</span><span class="sub">VIKING SUDOKU — BY GISLASON</span></div>
     <div id="grid" class="grid" aria-label="Sudoku grid"></div>
   </div>
   <div id="bar" class="bar" aria-label="Rune bar"></div>
@@ -18,15 +18,17 @@
     <button class="btn level" data-level="medium">Medium</button>
     <button class="btn level" data-level="hard">Hard</button>
     <button class="btn" id="newgame">New Game</button>
+    <button class="btn" id="hint">Hint</button>
   </div>
   <div id="status" class="status">Pick a rune, then click a square.</div>
   <div class="rules">
     <h2>Rules</h2>
     <ul>
-      <li>Each row, column, and 3×3 box must hold every rune exactly once:
+      <li>Each row, column, and 3×3 box must hold every rune exactly once:<br>
         <span class="runes">ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᛝ ᛞ ᛟ</span></li>
       <li>Pick a rune in the rune bar, then click a square to place it.</li>
       <li>The blank tile erases a square.</li>
+      <li>Stuck? Hint points you to a row, column, or box to check.</li>
       <li>Given (starting) runes are shaded and can't be changed.</li>
       <li>Conflicting runes turn red. Fill the grid correctly to win.</li>
     </ul>
