@@ -12,6 +12,7 @@ How to play
 - Conflicting runes are outlined in red. A full, correct grid wins automatically.
 - Hint points you to a row, column, or box to check (it never reveals the rune).
   If a placed rune is wrong, it names the row with the mistake.
+- Runes opens a table of all 24 Elder Futhark runes (close with the button, Esc, or a click outside).
 - Easy / Medium / Hard start a new puzzle (about 40-45 / 32-36 / 26-30 given runes).
   New Game starts a fresh puzzle at the current level. Every puzzle has one unique solution.
 

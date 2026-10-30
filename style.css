@@ -56,3 +56,15 @@ body { display: flex; justify-content: center; }
 .rules h2 { margin: .2rem 0; font-size: 1rem; color: var(--rune-accent); }
 .rules ul { margin: .3rem 0; padding-left: 1.2rem; }
 .rules li { margin: .2rem 0; }
+
+.overlay { position: fixed; inset: 0; background: rgba(0,0,0,.7); display: flex; align-items: center; justify-content: center; padding: 1rem; z-index: 10; }
+.overlay[hidden] { display: none; }
+.dialog { background: var(--chrome-bg); color: var(--chrome-text); border: 2px solid var(--btn-border); border-radius: 8px; box-shadow: 0 6px 24px rgba(0,0,0,.6); width: 100%; max-width: 640px; max-height: calc(100vh - 2rem); display: flex; flex-direction: column; }
+.dlghead { display: flex; align-items: center; justify-content: space-between; padding: .5rem .75rem; border-bottom: 1px solid var(--panel-border); }
+.dlghead h2 { margin: 0; font-size: 1.1rem; color: var(--rune-accent); }
+.dlgbody { overflow: auto; padding: .5rem .75rem .75rem; }
+.runetable { width: 100%; border-collapse: collapse; font-size: .9rem; }
+.runetable th { position: sticky; top: 0; background: var(--btn-bg); color: var(--btn-text); text-align: left; padding: .35rem .5rem; }
+.runetable td { padding: .3rem .5rem; border-bottom: 1px solid var(--panel-border); color: var(--panel-text); }
+.runetable tbody tr:nth-child(odd) td { background: var(--panel-bg); }
+.runetable td.rg { font-family: var(--font-rune); font-size: 1.5rem; color: var(--rune-accent); text-align: center; }

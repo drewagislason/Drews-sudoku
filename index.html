@@ -19,6 +19,7 @@
     <button class="btn level" data-level="hard">Hard</button>
     <button class="btn" id="newgame">New Game</button>
     <button class="btn" id="hint">Hint</button>
+    <button class="btn" id="runesbtn">Runes</button>
   </div>
   <div id="status" class="status">Pick a rune, then click a square.</div>
   <div class="rules">
@@ -32,6 +33,39 @@
       <li>Given (starting) runes are shaded and can't be changed.</li>
       <li>Conflicting runes turn red. Fill the grid correctly to win.</li>
     </ul>
+  </div>
+</div>
+<div id="overlay" class="overlay" hidden>
+  <div class="dialog" role="dialog" aria-modal="true" aria-labelledby="dlgtitle">
+    <div class="dlghead"><h2 id="dlgtitle">Runes</h2><button class="btn" id="closebtn" aria-label="Close">✕ Close</button></div>
+    <div class="dlgbody"><table class="runetable">
+<thead><tr><th>#</th><th>Rune</th><th>Name</th><th>Sound</th><th>Pronunciation</th><th>Meaning</th></tr></thead>
+<tbody>
+<tr><td>1</td><td class="rg">ᚠ</td><td>Fehu</td><td>f</td><td>like "f" in fox</td><td>wealth</td></tr>
+<tr><td>2</td><td class="rg">ᚢ</td><td>Urus</td><td>u</td><td>like "oo" in food</td><td>power</td></tr>
+<tr><td>3</td><td class="rg">ᚦ</td><td>Thurizaz</td><td>th</td><td>like "th" in thorn</td><td>troll</td></tr>
+<tr><td>4</td><td class="rg">ᚨ</td><td>Ansuz</td><td>a</td><td>like "a" in father</td><td>wisdom</td></tr>
+<tr><td>5</td><td class="rg">ᚱ</td><td>Raido</td><td>r</td><td>rolled like in Spanish</td><td>journey</td></tr>
+<tr><td>6</td><td class="rg">ᚲ</td><td>Kanu</td><td>k</td><td>like "k" in king</td><td>torch</td></tr>
+<tr><td>7</td><td class="rg">ᚷ</td><td>Gebo</td><td>g</td><td>hard "g" like in go</td><td>gift</td></tr>
+<tr><td>8</td><td class="rg">ᚹ</td><td>Wunjo</td><td>w/v</td><td>like win or Viking</td><td>joy</td></tr>
+<tr><td>9</td><td class="rg">ᚺ</td><td>Hagall</td><td>h</td><td>like "h" in hat</td><td>havoc</td></tr>
+<tr><td>10</td><td class="rg">ᚾ</td><td>Nyedis</td><td>n</td><td>like "n" in name</td><td>night</td></tr>
+<tr><td>11</td><td class="rg">ᛁ</td><td>Ice</td><td>I</td><td>like "ee" in see</td><td>cold</td></tr>
+<tr><td>12</td><td class="rg">ᛃ</td><td>Jera</td><td>y</td><td>like "y" in yes</td><td>harvest</td></tr>
+<tr><td>13</td><td class="rg">ᛇ</td><td>Eywaz</td><td>ei</td><td>like "ay" in say</td><td>strength</td></tr>
+<tr><td>14</td><td class="rg">ᛈ</td><td>Pertho</td><td>p</td><td>like "p" in pot</td><td>hidden</td></tr>
+<tr><td>15</td><td class="rg">ᛉ</td><td>Ælgiz</td><td>z</td><td>like "z" in haze</td><td>defence</td></tr>
+<tr><td>16</td><td class="rg">ᛋ</td><td>Sowull</td><td>s</td><td>like "s" in sun</td><td>sun</td></tr>
+<tr><td>17</td><td class="rg">ᛏ</td><td>Telwaz</td><td>t</td><td>like "t" in top</td><td>warrior</td></tr>
+<tr><td>18</td><td class="rg">ᛒ</td><td>Berkano</td><td>b</td><td>like "b" in bear</td><td>birth</td></tr>
+<tr><td>19</td><td class="rg">ᛖ</td><td>Ehwaz</td><td>e</td><td>like "e" in bet</td><td>horse</td></tr>
+<tr><td>20</td><td class="rg">ᛗ</td><td>Mannaz</td><td>m</td><td>like "m" in man</td><td>man</td></tr>
+<tr><td>21</td><td class="rg">ᛚ</td><td>Laguz</td><td>l</td><td>like "l" in lake</td><td>lake</td></tr>
+<tr><td>22</td><td class="rg">ᛝ</td><td>Ingwaz</td><td>ng</td><td>like "ng" in living</td><td>living</td></tr>
+<tr><td>23</td><td class="rg">ᛞ</td><td>Dagaz</td><td>d</td><td>like "d" in dawn</td><td>dawn</td></tr>
+<tr><td>24</td><td class="rg">ᛟ</td><td>Othala</td><td>o</td><td>like "o" in home</td><td>heritage</td></tr>
+</tbody></table></div>
   </div>
 </div>
 <script src="sudoku.js"></script>

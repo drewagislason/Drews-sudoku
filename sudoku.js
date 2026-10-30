@@ -125,13 +125,21 @@
     document.querySelectorAll('.level').forEach(function (b) { b.classList.toggle('active', b.dataset.level === state.level); });
     statusEl.classList.toggle('win', state.won);
     var filled = counts.slice(1).reduce(function (a, b) { return a + b; }, 0);
-    statusEl.textContent = state.won ? 'ᛋᚴᚨᛚ! Victory — the grid is complete. Well fought, Viking!'
+    statusEl.textContent = state.won ? 'ᚹᛖᛚ ᚷᛖᚱᛏ! Well done! You Win. Well fought Viking.'
       : (state.level[0].toUpperCase() + state.level.slice(1)) + ' · ' + state.given.filter(Boolean).length + ' given runes · ' + (81 - filled) + ' empty';
     if (state.msg && !state.won) statusEl.textContent = 'Hint: ' + state.msg;
   }
   document.querySelectorAll('.level').forEach(function (b) { b.addEventListener('click', function () { state.level = b.dataset.level; newGame(); }); });
   document.getElementById('newgame').addEventListener('click', newGame);
   document.getElementById('hint').addEventListener('click', function () { if (state.won) return; var h = hint(state.grid, state.solution); state.msg = h ? h.text : ''; render(); });
+  var overlay = document.getElementById('overlay');
+  function openRunes() { overlay.hidden = false; document.getElementById('closebtn').focus(); }
+  function closeRunes() { overlay.hidden = true; }
+  document.getElementById('runesbtn').addEventListener('click', openRunes);
+  document.getElementById('closebtn').addEventListener('click', closeRunes);
+  overlay.addEventListener('click', function (e) { if (e.target === overlay) closeRunes(); });
+  document.addEventListener('keydown', function (e) { if ((e.key === 'Escape' || e.key === 'Esc') && !overlay.hidden) closeRunes(); });
   newGame();
+  if (/[?#&]showrunes/.test(location.href)) openRunes();
   if (/[?#&]showhint/.test(location.href)) document.getElementById('hint').click();
 })();
