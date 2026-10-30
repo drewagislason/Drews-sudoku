@@ -1,0 +1,58 @@
+/* Palette taken from Drew's Hnefatafl game (styles.css) */
+:root {
+  --page-bg: #1a2332;
+  --board-cell: #f2f0e8;
+  --board-line: #1a1a1a;
+  --chrome-bg: #0a0a0a;
+  --chrome-text: #ffffff;
+  --given-bg: #e8d9a8;
+  --rune-accent: #e8e0d0;
+  --selected: #b0b0b0;
+  --legal: #c8e6c9;
+  --focus: #c9b896;
+  --conflict: #922b21;
+  --btn-bg: #2a3548;
+  --btn-border: #8aa0b8;
+  --btn-text: #f0f4f8;
+  --status-bg: #121820;
+  --status-text: #e8eef5;
+  --panel-bg: #0f141c;
+  --panel-text: #c8d0da;
+  --panel-border: #3a4558;
+  --font-ui: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-rune: "Segoe UI Historic", "Noto Sans Runic", "Junicode", "Segoe UI Symbol", "DejaVu Sans", serif;
+}
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; min-height: 100%; background: var(--page-bg); color: var(--chrome-text); font-family: var(--font-ui); }
+body { display: flex; justify-content: center; }
+#app { width: 100%; max-width: 540px; padding: .75rem .6rem 1.5rem; display: flex; flex-direction: column; gap: .65rem; }
+.runes { font-family: var(--font-rune); }
+.frame { background: var(--chrome-bg); border: 2px solid #000; box-shadow: 0 4px 18px rgba(0,0,0,.55); padding: 0 12px 12px; }
+.title { display: flex; flex-direction: column; align-items: center; padding: 8px 0; line-height: 1.1; }
+.title .runes { font-size: 2rem; letter-spacing: .3em; padding-left: .3em; color: var(--rune-accent); }
+.title .sub { font-size: .8rem; letter-spacing: .15em; text-transform: uppercase; color: #8a96a8; }
+.grid { display: grid; grid-template-columns: repeat(9, 1fr); aspect-ratio: 1/1; width: 100%; max-height: min(62vh, 500px); max-width: min(62vh, 500px); margin: 0 auto; border: 3px solid var(--board-line); background: var(--board-line); user-select: none; }
+.cell { background: var(--board-cell); border: 1px solid #555; display: flex; align-items: center; justify-content: center; font-family: var(--font-rune); font-size: clamp(1.1rem, 5vw, 2rem); color: #1a1a1a; cursor: pointer; min-width: 0; min-height: 0; }
+.cell.c3 { border-right: 3px solid var(--board-line); }
+.cell.r3 { border-bottom: 3px solid var(--board-line); }
+.cell.given { background: var(--given-bg); font-weight: 700; cursor: default; }
+.cell.user { color: #2a3548; }
+.cell.same { background: var(--legal); }
+.cell.given.same { background: #d4e8c4; }
+.cell.conflict { color: var(--conflict); box-shadow: inset 0 0 0 2px var(--conflict); }
+.cell:not(.given):hover { background: var(--selected); }
+.grid.won .cell { background: var(--legal); cursor: default; }
+.bar { display: grid; grid-template-columns: repeat(10, 1fr); gap: 4px; }
+.tile { aspect-ratio: 1/1; background: var(--board-cell); color: #1a1a1a; border: 2px solid var(--board-line); border-radius: 6px; font-family: var(--font-rune); font-size: clamp(1rem, 4.5vw, 1.7rem); cursor: pointer; padding: 0; }
+.tile.blank { color: #9a9588; font-size: .7rem; font-family: var(--font-ui); }
+.tile.sel { background: var(--selected); outline: 3px solid var(--focus); outline-offset: 1px; }
+.tile.done { opacity: .45; }
+.controls { display: flex; flex-wrap: wrap; gap: .4rem; justify-content: center; }
+.btn { background: var(--btn-bg); color: var(--btn-text); border: 1px solid var(--btn-border); border-radius: 6px; padding: .45rem .9rem; font: inherit; font-size: .9rem; cursor: pointer; }
+.btn.active { outline: 2px solid var(--focus); background: #3a4558; }
+.status { background: var(--status-bg); color: var(--status-text); border: 1px solid var(--panel-border); border-radius: 6px; padding: .5rem .75rem; text-align: center; font-size: .95rem; }
+.status.win { color: #fff; background: #2f5d34; border-color: var(--legal); font-weight: 700; font-size: 1.1rem; }
+.rules { background: var(--panel-bg); color: var(--panel-text); border: 1px solid var(--panel-border); border-radius: 6px; padding: .5rem 1rem; font-size: .9rem; }
+.rules h2 { margin: .2rem 0; font-size: 1rem; color: var(--rune-accent); }
+.rules ul { margin: .3rem 0; padding-left: 1.2rem; }
+.rules li { margin: .2rem 0; }
