@@ -89,11 +89,28 @@
     for (i = 0; i < 81; i++) if (!g[i]) { var n = cands(work, i).length; if (n < bn) { bn = n; best = i; } }
     return { text: 'Check row ' + (Math.floor(best / 9) + 1) + '.', kind: 'fewest', cell: best };
   }
-  var API = { RUNES: RUNES, LEVELS: LEVELS, generate: generate, isSolved: isSolved, conflicts: conflicts, count: count, hint: hint, cands: cands };
+  // Game-state helpers (pure, testable in node). st = {grid, given, undo, won, msg}
+  function place(st, i, v) {
+    if (st.won || st.given[i] || st.grid[i] === v) return false;
+    st.undo.push({ cell: i, prev: st.grid[i] }); st.grid[i] = v; st.msg = '';
+    if (isSolved(st.grid)) st.won = true;
+    return true;
+  }
+  function undo(st) {
+    if (st.won || !st.undo.length) return false;
+    var e = st.undo.pop(); st.grid[e.cell] = e.prev; st.msg = ''; return true;
+  }
+  function restart(st) {
+    for (var i = 0; i < 81; i++) if (!st.given[i]) st.grid[i] = 0;
+    st.undo = []; st.won = false; st.msg = '';
+  }
+  var LEVEL_ORDER = ['easy', 'medium', 'hard'];
+  function nextLevel(l) { return LEVEL_ORDER[(LEVEL_ORDER.indexOf(l) + 1) % 3]; }
+  var API = { RUNES: RUNES, LEVELS: LEVELS, generate: generate, isSolved: isSolved, conflicts: conflicts, count: count, hint: hint, cands: cands, place: place, undo: undo, restart: restart, nextLevel: nextLevel };
   if (typeof module !== 'undefined' && module.exports) { module.exports = API; return; }
 
   var gridEl = document.getElementById('grid'), barEl = document.getElementById('bar'), statusEl = document.getElementById('status');
-  var state = { level: 'easy', grid: [], given: [], sel: 1, won: false, solution: [], msg: '' }, cells = [], tiles = [];
+  var state = { level: 'easy', grid: [], given: [], sel: 1, won: false, solution: [], msg: '', undo: [] }, cells = [], tiles = [];
   for (var i = 0; i < 81; i++) {
     var d = document.createElement('div'); d.className = 'cell' + ((i % 9 === 2 || i % 9 === 5) ? ' c3' : '') + ((Math.floor(i / 9) === 2 || Math.floor(i / 9) === 5) ? ' r3' : '');
     d.dataset.i = i; d.addEventListener('click', onCell); gridEl.appendChild(d); cells.push(d);
@@ -106,11 +123,10 @@
   }
   function onCell() {
     var i = +this.dataset.i; if (state.won || state.given[i]) return;
-    state.grid[i] = state.sel; state.msg = ''; render();
-    if (isSolved(state.grid)) { state.won = true; render(); }
+    if (place(state, i, state.sel)) render();
   }
   function newGame() {
-    var p = generate(state.level); state.grid = p.puzzle.slice(); state.solution = p.solution; state.msg = ''; state.given = p.puzzle.map(Boolean); state.won = false; render();
+    var p = generate(state.level); state.grid = p.puzzle.slice(); state.solution = p.solution; state.msg = ''; state.given = p.puzzle.map(Boolean); state.won = false; state.undo = []; render();
   }
   function render() {
     var bad = conflicts(state.grid), counts = [0,0,0,0,0,0,0,0,0,0];
@@ -122,14 +138,18 @@
     }
     tiles.forEach(function (t) { var v = +t.dataset.v; t.classList.toggle('sel', v === state.sel); t.classList.toggle('done', v > 0 && counts[v] >= 9); });
     gridEl.classList.toggle('won', state.won);
-    document.querySelectorAll('.level').forEach(function (b) { b.classList.toggle('active', b.dataset.level === state.level); });
+    var lv = { easy: 'Easy', medium: 'Mid', hard: 'Hard' }[state.level];
+    document.getElementById('levelbtn').textContent = 'Level: ' + lv;
+    document.getElementById('undo').disabled = state.won || !state.undo.length;
     statusEl.classList.toggle('win', state.won);
     var filled = counts.slice(1).reduce(function (a, b) { return a + b; }, 0);
     statusEl.textContent = state.won ? 'ᚹᛖᛚ ᚷᛖᚱᛏ! Well done! You Win. Well fought Viking.'
       : (state.level[0].toUpperCase() + state.level.slice(1)) + ' · ' + state.given.filter(Boolean).length + ' given runes · ' + (81 - filled) + ' empty';
     if (state.msg && !state.won) statusEl.textContent = 'Hint: ' + state.msg;
   }
-  document.querySelectorAll('.level').forEach(function (b) { b.addEventListener('click', function () { state.level = b.dataset.level; newGame(); }); });
+  document.getElementById('levelbtn').addEventListener('click', function () { state.level = nextLevel(state.level); newGame(); });
+  document.getElementById('restart').addEventListener('click', function () { restart(state); render(); });
+  document.getElementById('undo').addEventListener('click', function () { if (undo(state)) render(); });
   document.getElementById('newgame').addEventListener('click', newGame);
   document.getElementById('hint').addEventListener('click', function () { if (state.won) return; var h = hint(state.grid, state.solution); state.msg = h ? h.text : ''; render(); });
   var overlay = document.getElementById('overlay');

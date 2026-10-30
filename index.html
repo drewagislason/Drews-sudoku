@@ -14,10 +14,10 @@
   </div>
   <div id="bar" class="bar" aria-label="Rune bar"></div>
   <div class="controls">
-    <button class="btn level" data-level="easy">Easy</button>
-    <button class="btn level" data-level="medium">Medium</button>
-    <button class="btn level" data-level="hard">Hard</button>
+    <button class="btn" id="levelbtn" title="Click to change level">Level: Easy</button>
     <button class="btn" id="newgame">New Game</button>
+    <button class="btn" id="restart">Restart</button>
+    <button class="btn" id="undo" disabled>Undo</button>
     <button class="btn" id="hint">Hint</button>
     <button class="btn" id="runesbtn">Runes</button>
   </div>
@@ -28,7 +28,7 @@
       <li>Each row, column, and 3×3 box must hold every rune exactly once:<br>
         <span class="runes">ᚠ ᚢ ᚦ ᚨ ᚱ ᚲ ᛝ ᛞ ᛟ</span></li>
       <li>Pick a rune in the rune bar, then click a square to place it.</li>
-      <li>The blank tile erases a square.</li>
+      <li>The blank tile erases a square. Undo takes back your last move; Restart clears all your runes.</li>
       <li>Stuck? Hint points you to a row, column, or box to check.</li>
       <li>Given (starting) runes are shaded and can't be changed.</li>
       <li>Conflicting runes turn red. Fill the grid correctly to win.</li>

@@ -68,3 +68,6 @@ body { display: flex; justify-content: center; }
 .runetable td { padding: .3rem .5rem; border-bottom: 1px solid var(--panel-border); color: var(--panel-text); }
 .runetable tbody tr:nth-child(odd) td { background: var(--panel-bg); }
 .runetable td.rg { font-family: var(--font-rune); font-size: 1.5rem; color: var(--rune-accent); text-align: center; }
+.btn:disabled { opacity: .45; cursor: default; }
+
+#levelbtn { min-width: 7.2em; white-space: nowrap; }
